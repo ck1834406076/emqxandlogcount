@@ -1,0 +1,273 @@
+{
+    "content": {
+        "mapSlice": "1",
+        "eTag": "ver1.0",
+        "ack": true,
+        "seqNum": "70363c1e414938de",
+        "map": {
+            "timeStamp": 271311,
+            "nodes": [{
+                    "name": "38542-1",
+                    "id": {
+                        "region": 38542,
+                        "id": 1
+                    },
+                    "refPos": {
+                        "lon": 116.19754205,
+                        "lat": 39.42856553,
+                        "ele": 0
+                    },
+                    "inLinks": [{
+                            "name": "JXGS",
+                            "upstreamNodeId": {
+                                "region": 38542,
+                                "id": 0
+                            },
+                            "linkWidth": 1875,
+                            "points": [{
+                                    "lon": 116.197511673,
+                                    "lat": 39.429192574,
+                                    "ele": 0
+                                }, {
+                                    "lon": 116.197517132,
+                                    "lat": 39.42910464,
+                                    "ele": 0
+                                }, {
+                                    "lon": 116.197521675,
+                                    "lat": 39.429023688,
+                                    "ele": 0
+                                }, {
+                                    "lon": 116.19752877,
+                                    "lat": 39.428888756,
+                                    "ele": 0
+                                }, {
+                                    "lon": 116.19753562,
+                                    "lat": 39.428753815,
+                                    "ele": 0
+                                }, {
+                                    "lon": 116.197540335,
+                                    "lat": 39.428618819,
+                                    "ele": 0
+                                }, {
+                                    "lon": 116.19754205,
+                                    "lat": 39.42856553,
+                                    "ele": 0
+                                }
+                            ],
+                            "movements": [{
+                                    "remoteIntersection": {
+                                        "region": 38542,
+                                        "id": 2
+                                    },
+                                    "phaseId": 0
+                                }
+                            ],
+                            "lanes": [{
+                                    "laneId": 1,
+                                    "laneWidth": 375,
+                                    "laneAttributes": {
+                                        "laneType": "128"
+                                    },
+                                    "maneuvers": 2048,
+                                    "connectsTo": [{
+                                            "remoteIntersection": {
+                                                "region": 38542,
+                                                "id": 2
+                                            },
+                                            "connectingLane": {
+                                                "laneId": 1,
+                                                "maneuvers": ["2048"]
+                                            }
+                                        }
+                                    ],
+                                    "points": [{
+                                            "lon": 116.197599117,
+                                            "lat": 39.429200408,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197604709,
+                                            "lat": 39.429107554,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197612375,
+                                            "lat": 39.428973713,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197623503,
+                                            "lat": 39.428746889,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197630019,
+                                            "lat": 39.428565599,
+                                            "ele": 0
+                                        }
+                                    ]
+                                }, {
+                                    "laneId": 2,
+                                    "laneWidth": 375,
+                                    "laneAttributes": {
+                                        "laneType": "128"
+                                    },
+                                    "maneuvers": 2048,
+                                    "connectsTo": [{
+                                            "remoteIntersection": {
+                                                "region": 38542,
+                                                "id": 2
+                                            },
+                                            "connectingLane": {
+                                                "laneId": 2,
+                                                "maneuvers": ["2048"]
+                                            }
+                                        }
+                                    ],
+                                    "points": [{
+                                            "lon": 116.197555721,
+                                            "lat": 39.42919652,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197561603,
+                                            "lat": 39.429099019,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197569264,
+                                            "lat": 39.428964105,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197579977,
+                                            "lat": 39.428748191,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197586232,
+                                            "lat": 39.428565567,
+                                            "ele": 0
+                                        }
+                                    ]
+                                }, {
+                                    "laneId": 3,
+                                    "laneWidth": 375,
+                                    "laneAttributes": {
+                                        "laneType": "128"
+                                    },
+                                    "maneuvers": 2048,
+                                    "connectsTo": [{
+                                            "remoteIntersection": {
+                                                "region": 38542,
+                                                "id": 2
+                                            },
+                                            "connectingLane": {
+                                                "laneId": 3,
+                                                "maneuvers": ["2048"]
+                                            }
+                                        }
+                                    ],
+                                    "points": [{
+                                            "lon": 116.197511673,
+                                            "lat": 39.429192574,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197517132,
+                                            "lat": 39.42910464,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.19752474,
+                                            "lat": 39.428969723,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197535621,
+                                            "lat": 39.428753815,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197542048,
+                                            "lat": 39.428565535,
+                                            "ele": 0
+                                        }
+                                    ]
+                                }, {
+                                    "laneId": 4,
+                                    "laneWidth": 375,
+                                    "laneAttributes": {
+                                        "laneType": "128"
+                                    },
+                                    "maneuvers": 2048,
+                                    "connectsTo": [{
+                                            "remoteIntersection": {
+                                                "region": 38542,
+                                                "id": 2
+                                            },
+                                            "connectingLane": {
+                                                "laneId": 4,
+                                                "maneuvers": ["2048"]
+                                            }
+                                        }
+                                    ],
+                                    "points": [{
+                                            "lon": 116.197467534,
+                                            "lat": 39.429188619,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197472563,
+                                            "lat": 39.42911164,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197480065,
+                                            "lat": 39.428977336,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197491473,
+                                            "lat": 39.428751034,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197497888,
+                                            "lat": 39.428565502,
+                                            "ele": 0
+                                        }
+                                    ]
+                                }, {
+                                    "laneId": 5,
+                                    "laneWidth": 375,
+                                    "laneAttributes": {
+                                        "laneType": "128"
+                                    },
+                                    "maneuvers": 2048,
+                                    "connectsTo": [{
+                                            "remoteIntersection": {
+                                                "region": 38542,
+                                                "id": 2
+                                            },
+                                            "connectingLane": {
+                                                "laneId": 5,
+                                                "maneuvers": ["2048"]
+                                            }
+                                        }
+                                    ],
+                                    "points": [{
+                                            "lon": 116.197424126,
+                                            "lat": 39.42918473,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197428587,
+                                            "lat": 39.429118587,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197437335,
+                                            "lat": 39.428961747,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197450436,
+                                            "lat": 39.428732173,
+                                            "ele": 0
+                                        }, {
+                                            "lon": 116.197457264,
+                                            "lat": 39.428565473,
+                                            "ele": 0
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

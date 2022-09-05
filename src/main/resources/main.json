@@ -1,0 +1,17 @@
+{
+  "name": "rsm",
+  "content": {
+    "rsm_source": {
+      "rsm_source_type": "detection",
+      "rsm_source_id": "test"
+    },
+    "id": "test",
+    "time_stamp": 1654587757600,
+    "send_time": 1654587757784,
+    "ref_pos": {
+      "lon": 0.0,
+      "lat": 0.0
+    },
+    "participant_list": []
+  }
+}

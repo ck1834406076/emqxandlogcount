@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="5 seconds">
+    <!-- 项目名称 -->
+    <property name="projectname" value="emqxtest" />
+    <!-- 日志存放路径 -->
+    <property name="log.path" value="/opt/logs" />
+    <!-- 日志输出格式 -->
+    <property name="log.pattern" value="%d{yyy-MM-dd HH:mm:ss.SSS} [%X{X-B3-TraceId:-},%X{X-B3-SpanId:-}] [%thread] %-5level %logger{20} - %msg%n" />
+
+    <!-- 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                [%d{yyyy-MM-dd HH:mm:ss.SSS}] %highlight(%-5level) %X{X-B3-TraceId} %X{traceId} %yellow(%X{X-B3-TraceId}),%green(%X{X-B3-SpanId}),%blue(%X{X-B3-ParentSpanId}) %yellow(%thread) %green(%logger) %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- 系统日志输出 -->
+    <appender name="count_log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/logcount.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>${log.path}/logcount.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 日志最大的历史 60天 -->
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100 MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                [%d{yyyy-MM-dd HH:mm:ss.SSS}] %highlight(%-5level) %X{X-B3-TraceId} %X{traceId} %yellow(%X{X-B3-TraceId}),%green(%X{X-B3-SpanId}),%blue(%X{X-B3-ParentSpanId}) %yellow(%thread) %green(%logger)-[%method:%L] %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <!-- 系统日志输出 -->
+    <appender name="file_info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/emqxtest-info.log</file>
+        <!-- 循环政策：基于时间创建日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>${log.path}/emqxtest-info.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 日志最大的历史 60天 -->
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>10GB</totalSizeCap>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100 MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">
+            &lt;!&ndash; 过滤的级别 &ndash;&gt;
+            <level>INFO</level>
+            &lt;!&ndash; 匹配时的操作：接收（记录） &ndash;&gt;
+            <onMatch>ACCEPT</onMatch>
+            &lt;!&ndash; 不匹配时的操作：拒绝（不记录） &ndash;&gt;
+            <onMismatch>DENY</onMismatch>
+        </filter>-->
+    </appender>
+
+    <appender name="file_error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log.path}/${projectname}-error.log</file>
+        <!-- 循环政策：基于时间创建日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志文件名格式 -->
+            <fileNamePattern>${log.path}/${projectname}-error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 日志最大的历史 60天 -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${log.pattern}</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 过滤的级别 -->
+            <level>ERROR</level>
+            <!-- 匹配时的操作：接收（记录） -->
+            <onMatch>ACCEPT</onMatch>
+            <!-- 不匹配时的操作：拒绝（不记录） -->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+
+    <!-- 系统模块日志级别控制  -->
+    <logger name="com.loop" level="info" />
+    <!-- Spring日志级别控制  -->
+    <logger name="org.springframework" level="warn" />
+
+    <!--kafka日志级别控制-->
+    <logger name="org.apache.kafka" level="info" />
+
+    <!--mybatis日志-->
+    <logger name="org.mybatis.spring" level="info" />
+
+    <!--apollo日志-->
+    <logger name="com.ctrip.framework.apollo" level="error" />
+
+    <logger name="com.kfktoexcel.kfktoexcel.endpoint.MqttHandler" level="info" />
+
+    <!--频繁打印的mapper日志-->
+    <logger name="com.chinasoftinternational.v2xserver.edge.mapper" level="info" />
+
+    <logger name="com.kfktoexcel.kfktoexcel.utils.LogCount" additivity="true" level="info">
+        <appender-ref ref="count_log"/>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="console" />
+    </root>
+
+    <!--系统操作日志-->
+    <root level="info">
+        <appender-ref ref="file_info" />
+        <appender-ref ref="file_error" />
+    </root>
+
+</configuration>

@@ -1,0 +1,38 @@
+{
+  "ptc_type": "motor",
+  "ptcId": 1060606639060221952,
+  "sec_mark": 37600,
+  "cross_id": "",
+  "global_track_id": 34417,
+  "source": "integrated",
+  "pos": {
+    "lon": 116.1921811,
+    "lat": 39.4042014
+  },
+  "pos_confidence": {
+    "position_confidence": 0
+  },
+  "nez": {
+    "n": 4361944.063,
+    "e": 430448.833,
+    "z": 0.0,
+    "v": 75.93272262838993,
+    "vX": -19.2276,
+    "vY": -73.458
+  },
+  "speed": 1054,
+  "heading": 15458,
+  "vehicle_color": "2",
+  "vehicle_model": "",
+  "vehicle_brand": "卡车_箱式双门_车尾",
+  "vehicle_style": "",
+  "size": {
+    "width": 255,
+    "length": 800,
+    "height": 400
+  },
+  "plate_no": "冀R96UR1",
+  "vehicle_class": {
+    "basic_vehicle_class": 25
+  }
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kfktoexcel.kfktoexcel.mapper.DbRsmDataMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kfktoexcel.kfktoexcel.entity.db.DbRsmData">
+        <id column="id" property="id" />
+        <result column="time_stamp" property="timeStamp" />
+        <result column="send_time" property="sendTime" />
+        <result column="ptc_type" property="ptcType" />
+        <result column="ptcId" property="ptcId" />
+        <result column="sec_mark" property="secMark" />
+        <result column="cross_id" property="crossId" />
+        <result column="global_track_id" property="globalTrackId" />
+        <result column="source" property="source" />
+        <result column="speed" property="speed" />
+        <result column="heading" property="heading" />
+        <result column="vehicle_color" property="vehicleColor" />
+        <result column="vehicle_model" property="vehicleModel" />
+        <result column="vehicle_brand" property="vehicleBrand" />
+        <result column="vehicle_style" property="vehicleStyle" />
+        <result column="plate_no" property="plateNo" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, time_stamp, send_time, ptc_type, ptcId, sec_mark, cross_id, global_track_id, source, speed, heading, vehicle_color, vehicle_model, vehicle_brand, vehicle_style, plate_no
+    </sql>
+
+</mapper>
