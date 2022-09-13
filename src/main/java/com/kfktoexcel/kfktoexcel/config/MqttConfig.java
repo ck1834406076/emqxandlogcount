@@ -50,6 +50,9 @@ public class MqttConfig {
     @Value("${mqtt.client-id-prefix}")
     private String clientIdPrefix;
 
+    @Value("${mqtt.retainenable}")
+    private boolean retainEnable;
+
     @Bean
     public MqttPahoClientFactory mqttClientFactory() {
         DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
@@ -75,6 +78,7 @@ public class MqttConfig {
                 (clientIdPrefix + "_outbound_"+System.currentTimeMillis(), mqttClientFactory());
         messageHandler.setCompletionTimeout(50000);
         messageHandler.setAsync(true);
+        messageHandler.setDefaultRetained(retainEnable);
         return messageHandler;
     }
 

@@ -91,6 +91,7 @@ mqtt:
   username: admin
   password: public
   keep-alive-interval: 50
+  retainenable: false
   consumer:
     client-id: ${random.value}
 
