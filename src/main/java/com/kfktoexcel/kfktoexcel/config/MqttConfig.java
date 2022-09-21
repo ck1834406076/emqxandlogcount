@@ -78,7 +78,7 @@ public class MqttConfig {
                 (clientIdPrefix + "_outbound_"+System.currentTimeMillis(), mqttClientFactory());
         messageHandler.setCompletionTimeout(50000);
         messageHandler.setAsync(true);
-        messageHandler.setDefaultRetained(retainEnable);
+        //messageHandler.setDefaultRetained(retainEnable);
         return messageHandler;
     }
 

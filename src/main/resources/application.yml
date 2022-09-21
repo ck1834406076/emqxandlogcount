@@ -6,7 +6,7 @@ spring:
   #kafka配置
   datasource:
     name: kafka_data  #数据库名
-    #    url: jdbc:mysql://192.168.2.119:3306/v2x_edge?useUnicode=true&ampcharacterEncoding=utf-8&ampserverTimezone=Asia/Shanghai&useSSL=false
+    #    url: jdbc:my sql://192.168.2.119:3306/v2x_edge?useUnicode=true&ampcharacterEncoding=utf-8&ampserverTimezone=Asia/Shanghai&useSSL=false
     #url: jdbc:mysql://127.0.0.1/kafka_data?useUnicode=true&ampcharacterEncoding=utf-8&ampserverTimezone=UTC&useSSL=false
    # url: jdbc:mysql://119.3.31.181:4306/kafka_data?useUnicode=true&ampcharacterEncoding=utf-8&ampserverTimezone=Asia/Shanghai&useSSL=false
     url: jdbc:mysql://192.168.2.119:3306/kafka_data?useUnicode=true&ampcharacterEncoding=utf-8&ampserverTimezone=Asia/Shanghai&useSSL=false
@@ -86,8 +86,8 @@ mqtt:
   #server-uris: tcp://119.3.31.181:1883,tcp://121.36.143.78:1883,tcp://122.112.136.178:1883
   #server-uris: tcp://192.168.2.124:1883
   #server-uris: tcp://192.168.56.101:1883
-  #server-uris: tcp://121.36.162.247:1885
-  server-uris: tcp://192.168.2.5:1885
+  server-uris: tcp://121.36.162.247:1885
+  #server-uris: tcp://192.168.2.5:1885
   username: admin
   password: public
   keep-alive-interval: 50
