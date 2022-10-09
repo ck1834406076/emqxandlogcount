@@ -1,5 +1,5 @@
 package com.kfktoexcel.kfktoexcel.utils;
-import cn.hutool.json.JSONArray;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,12 +116,15 @@ public class LogCount {
                 StringBuffer sBuffer = new StringBuffer();
                 try {
                     try {
-                        fr = new FileReader(file1);// 建立FileReader对象，并实例化为fr
+                        // 建立FileReader对象，并实例化为fr
+                        fr = new FileReader(file1);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    br = new BufferedReader(fr);// 建立BufferedReader对象，并实例化为br
-                    String Line = br.readLine();// 从文件读取一行字符串
+                    // 建立BufferedReader对象，并实例化为br
+                    br = new BufferedReader(fr);
+                    // 从文件读取一行字符串
+                    String Line = br.readLine();
 // 判断读取到的字符串是否不为空
                     while (Line != null) {
                         if (Line.contains("logClass")) {
@@ -139,16 +142,19 @@ public class LogCount {
                                 perMap.put(topic, timeList);
                             }
                         }
-                        Line = br.readLine();//从文件中继续读取一行数据
+                        //从文件中继续读取一行数据
+                        Line = br.readLine();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
                     try {
                         if (br != null){
-                            br.close();}// 关闭BufferedReader对象
+                            // 关闭BufferedReader对象
+                            br.close();}
                         if (fr != null){
-                            fr.close();}// 关闭文件
+                            fr.close();
+                        }// 关闭文件
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
