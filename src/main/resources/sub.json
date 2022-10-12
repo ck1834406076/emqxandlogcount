@@ -32,6 +32,7 @@
     "height": 400
   },
   "plate_no": "冀R96UR1",
+  "gat_vehicle_class": "K33",
   "vehicle_class": {
     "basic_vehicle_class": 25
   }

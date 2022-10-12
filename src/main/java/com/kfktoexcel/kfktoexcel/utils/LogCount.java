@@ -171,7 +171,7 @@ public class LogCount {
         for (Map.Entry<String, List<Integer>> entry : entries) {
 
             //区间分割
-            LinkedList<Integer> linkedList = new LinkedList<>(Arrays.asList(3,20,30,40,50,100,200));
+            LinkedList<Integer> linkedList = new LinkedList<>(Arrays.asList(3,5,10,20,30,40,50,100,200));
             linkedList.add(0,0);
             linkedList.add(linkedList.size(),999);
 
