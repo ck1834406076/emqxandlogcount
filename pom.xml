@@ -110,6 +110,20 @@
             <version>1.29</version>
         </dependency>
 
+        <!--start:视频获取某一帧的图片-->
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv</artifactId>
+            <version>1.4.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>ffmpeg-platform</artifactId>
+            <version>4.0.2-1.4.3</version>
+        </dependency>
+        <!--end:视频获取某一帧的图片-->
+
 
     </dependencies>
 
