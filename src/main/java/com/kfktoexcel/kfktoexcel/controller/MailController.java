@@ -19,7 +19,7 @@ import java.util.Random;
 @RestController
 @Api(tags = "邮件控制器")
 @Slf4j
-public class mailController {
+public class MailController {
 
     @Autowired
     private JavaMailSender javaMailSender;
