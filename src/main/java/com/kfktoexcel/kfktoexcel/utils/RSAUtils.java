@@ -1,13 +1,16 @@
 package com.kfktoexcel.kfktoexcel.utils;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import javax.crypto.Cipher;
+import java.io.ByteArrayOutputStream;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
@@ -16,184 +19,180 @@ import java.util.List;
 import java.util.Map;
 
 public class RSAUtils {
-    protected static final Log log = LogFactory.getLog(RSAUtils.class);
-    // 加密的方式
-    private static String KEY_RSA_TYPE = "RSA";
-    // 转换 算法/反馈模式/填充方案    RSA/ECB/PKCS1Padding (1024, 2048)
-    // 加密算法有：AES，DES，DESede(DES3)和RSA 四种
-    // 模式有CBC(有向量模式)和ECB(无向量模式)，向量模式可以简单理解为偏移量，使用CBC模式需要定义一个IvParameterSpec对象
-    private static String KEY_RSA_TYPE_ALL = "RSA/ECB/PKCS1Padding";
-    // JDK方式 RSA加密最大只有 1024位
-    private static int KEY_SIZE = 1024;
-    // 模长
-    private static int ENCODE_PART_SIZE = KEY_SIZE / 8;
-    // 公钥
-    public static final String PUBLIC_KEY_NAME = "public";
-    // 私钥
-    public static final String PRIVATE_KEY_NAME = "private";
+    public static final String CHARSET = "UTF-8";
+    public static final String RSA_ALGORITHM = "RSA"; // ALGORITHM ['ælgərɪð(ə)m] 算法的意思
 
-    /**
-     * 创建公钥和私钥
-     *
-     * @return
-     */
-    public static Map<String, String> createRSAKeys() {
-        // 用来存放公钥和私钥的 Base64位加密
-        Map<String, String> keyPairMap = new HashMap<String, String>();
+    public static Map<String, String> createKeys(int keySize) {
+        // 为RSA算法创建一个KeyPairGenerator对象
+        KeyPairGenerator kpg;
         try {
-            // 生成公钥和私钥对——给予 RSA算法生成对象
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(KEY_RSA_TYPE);
-            // 使用给定的随机源(以及默认参数集)初始化特定密钥大小的密钥对生成器
-            keyPairGenerator.initialize(KEY_SIZE, new SecureRandom());
-
-            // 生成密钥对
-            KeyPair keyPair = keyPairGenerator.generateKeyPair();
-            // 返回对此密钥对的公钥组件的引用
-            RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
-            // 返回对此密钥对的私钥组件的引用
-            RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
-
-            // 得到公钥字符串和秘钥字符串
-            String publicKeyValue = Base64.encodeBase64String(keyPair.getPublic().getEncoded());
-            String privateKeyValue = Base64.encodeBase64String(keyPair.getPrivate().getEncoded());
-
-            // 存入公钥和私钥，以便以后获取
-            keyPairMap.put(PUBLIC_KEY_NAME, publicKeyValue);
-            keyPairMap.put(PRIVATE_KEY_NAME, privateKeyValue);
+            kpg = KeyPairGenerator.getInstance(RSA_ALGORITHM);
         } catch (NoSuchAlgorithmException e) {
-            log.error("当前JDK版本没有找到RSA加密算法！");
-            e.printStackTrace();
+            throw new IllegalArgumentException("No such algorithm-->[" + RSA_ALGORITHM + "]");
         }
+
+        // 初始化KeyPairGenerator对象,密钥长度
+        kpg.initialize(keySize);
+        // 生成密匙对
+        KeyPair keyPair = kpg.generateKeyPair();
+        // 得到公钥
+        Key publicKey = keyPair.getPublic();
+        String publicKeyStr = Base64.encodeBase64URLSafeString(publicKey.getEncoded());
+        // 得到私钥
+        Key privateKey = keyPair.getPrivate();
+        String privateKeyStr = Base64.encodeBase64URLSafeString(privateKey.getEncoded());
+        // map装载公钥和私钥
+        Map<String, String> keyPairMap = new HashMap<String, String>();
+        keyPairMap.put("publicKey", publicKeyStr);
+        keyPairMap.put("privateKey", privateKeyStr);
+        // 返回map
         return keyPairMap;
     }
 
+    /**
+     * 得到公钥
+     * @param publicKey  密钥字符串（经过base64编码）
+     * @throws Exception
+     */
+    public static RSAPublicKey getPublicKey(String publicKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        // 通过X509编码的Key指令获得公钥对象
+        KeyFactory keyFactory = KeyFactory.getInstance(RSA_ALGORITHM);
+        X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(Base64.decodeBase64(publicKey));
+        RSAPublicKey key = (RSAPublicKey) keyFactory.generatePublic(x509KeySpec);
+        return key;
+    }
+
+    /**
+     * 得到私钥
+     * @param privateKey  密钥字符串（经过base64编码）
+     * @throws Exception
+     */
+    public static RSAPrivateKey getPrivateKey(String privateKey) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        // 通过PKCS#8编码的Key指令获得私钥对象
+        KeyFactory keyFactory = KeyFactory.getInstance(RSA_ALGORITHM);
+        PKCS8EncodedKeySpec pkcs8KeySpec = new PKCS8EncodedKeySpec(Base64.decodeBase64(privateKey));
+        RSAPrivateKey key = (RSAPrivateKey) keyFactory.generatePrivate(pkcs8KeySpec);
+        return key;
+    }
 
     /**
      * 公钥加密
-     * 描述：1字节 = 8 位，最大加密长度为 128 - 11 = 117 字节，不管多长数据，加密出来都是128字节的长度
-     *
-     * @param str       加密字符串
-     * @param publicKey 公钥
-     * @return 密文
-     * @throws Exception 加密过程中的异常信息
+     * @param data
+     * @param publicKey
+     * @return
      */
-    public static String encryptByPublicKey(String str, String publicKey) {
-        // base64 编码的公钥
-        byte[] publicBytes = Base64.decodeBase64(publicKey);
-        // 公钥加密——按照X509标准对其进行编码的密钥 复制数组的内容，以防随后进行修改。
-        X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(publicBytes);
-        // 已经加密过的数据
-        List<byte[]> encodedDataList = new LinkedList<byte[]>();
-
-        // 最大加密长度 1024/8/8 - 11
-        int maxEncodeSize = ENCODE_PART_SIZE - 11;
-        // 所有加密的数据
-        String encodeBase64Result = null;
+    public static String publicEncrypt(String data, RSAPublicKey publicKey) {
         try {
-            // 密钥工厂——用于将密钥（Key类型的不透明加密密钥）转换成密钥规范（底层密钥材料的透明表示）
-            KeyFactory keyFactory = KeyFactory.getInstance(KEY_RSA_TYPE);
-            // 根据提供的密钥规范（密钥材料）生成公钥对象
-            PublicKey publicKeys = keyFactory.generatePublic(x509EncodedKeySpec);
-            // 为加密和解密提供密码功能（所传递的参数：转换）
-            Cipher cipher = Cipher.getInstance(KEY_RSA_TYPE_ALL);
-            // 用密钥初始化此Cipher    ENCRYPT_MODE：用于将 Cipher初始化为解密模式的常量
-            cipher.init(Cipher.ENCRYPT_MODE, publicKeys);
-
-            byte[] strBytes = str.getBytes("utf-8");
-            // 获取所有被加密数据长度
-            int strLen = strBytes.length;
-            // 如果明文长度大于 模长-11 则要分组加密
-            for (int i = 0; i < strLen; i += maxEncodeSize) {
-                int curPosition = strLen - i;
-                int tempLen = curPosition;
-                if (curPosition > maxEncodeSize) {
-                    tempLen = maxEncodeSize;
-                }
-                // 待加密分段数据
-                byte[] tempBytes = new byte[tempLen];
-                System.arraycopy(strBytes, i, tempBytes, 0, tempLen);
-                byte[] tempEncodedData = cipher.doFinal(tempBytes);
-                encodedDataList.add(tempEncodedData);
-            }
-
-            // 加密次数
-            int partLen = encodedDataList.size();
-            // 所有加密的长度
-            int allEncodedLen = partLen * ENCODE_PART_SIZE;
-            // 存放所有 RSA分段加密数据
-            byte[] encodeData = new byte[allEncodedLen];
-            for (int i = 0; i < partLen; i++) {
-                byte[] tempByteList = encodedDataList.get(i);
-                System.arraycopy(tempByteList, 0, encodeData, i * ENCODE_PART_SIZE, ENCODE_PART_SIZE);
-            }
-            encodeBase64Result = Base64.encodeBase64String(encodeData);
+            Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
+            cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+            return Base64.encodeBase64URLSafeString(rsaSplitCodec(cipher, Cipher.ENCRYPT_MODE, data.getBytes(CHARSET), publicKey.getModulus().bitLength()));
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("加密字符串[" + data + "]时遇到异常", e);
         }
-        return encodeBase64Result;
     }
-
 
     /**
      * 私钥解密
-     *
-     * @param str        解密字符串
-     * @param privateKey 私钥
-     * @return 明文
-     * @throws Exception 解密过程中的异常信息
+     * @param data
+     * @param privateKey
+     * @return
      */
-    public static String decryptByPrivateKey(String str, String privateKey) {
-        byte[] privateBytes = Base64.decodeBase64(privateKey);
-        byte[] encodeStr = Base64.decodeBase64(str);
 
-        // 要解密的数据长度
-        int encodePartLen = encodeStr.length / ENCODE_PART_SIZE;
-        List<byte[]> decodeListData = new LinkedList<byte[]>();
-        // 所有解密的数据
-        String decodeStrResult = null;
-
-        // 私钥解密
-        PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(privateBytes);
+    public static String privateDecrypt(String data, RSAPrivateKey privateKey) {
         try {
-            // 密钥工厂——用于将密钥（Key类型的不透明加密密钥）转换成密钥规范（底层密钥材料的透明表示）
-            KeyFactory keyFactory = KeyFactory.getInstance(KEY_RSA_TYPE);
-            // 根据提供的密钥规范（密钥材料）生成私钥对象
-            PrivateKey privateKeys = keyFactory.generatePrivate(pkcs8EncodedKeySpec);
-            // 为加密和解密提供密码功能（所传递的参数：转换）
-            Cipher cipher = Cipher.getInstance(KEY_RSA_TYPE_ALL);
-            // 用密钥初始化此Cipher    ENCRYPT_MODE：用于将 Cipher初始化为解密模式的常量
-            cipher.init(Cipher.DECRYPT_MODE, privateKeys);
-
-            // 初始化所有被解密数据长度
-            int allDecodeByteLen = 0;
-            for (int i = 0; i < encodePartLen; i++) {
-                // 待解密数据分段
-                byte[] tempEncodedData = new byte[ENCODE_PART_SIZE];
-                System.arraycopy(encodeStr, i * ENCODE_PART_SIZE, tempEncodedData, 0, ENCODE_PART_SIZE);
-                byte[] decodePartData = cipher.doFinal(tempEncodedData);
-                decodeListData.add(decodePartData);
-                allDecodeByteLen += decodePartData.length;
-            }
-
-            byte[] decodeResultBytes = new byte[allDecodeByteLen];
-            for (int i = 0, curPosition = 0; i < encodePartLen; i++) {
-                byte[] tempStrBytes = decodeListData.get(i);
-                int tempStrBytesLen = tempStrBytes.length;
-                System.arraycopy(tempStrBytes, 0, decodeResultBytes, curPosition, tempStrBytesLen);
-                curPosition += tempStrBytesLen;
-            }
-            decodeStrResult = new String(decodeResultBytes, "UTF-8");
+            Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, privateKey);
+            return new String(rsaSplitCodec(cipher, Cipher.DECRYPT_MODE, Base64.decodeBase64(data), privateKey.getModulus().bitLength()), CHARSET);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("解密字符串[" + data + "]时遇到异常", e);
         }
-        return decodeStrResult;
     }
 
-    public static void main(String[] args) {
-        while (true) {
-            Integer i = Integer.MAX_VALUE;
-            i++;
-            System.out.println(i);
+    /**
+     * 私钥加密
+     * @param data
+     * @param privateKey
+     * @return
+     */
+
+    public static String privateEncrypt(String data, RSAPrivateKey privateKey) {
+        try {
+            Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
+            //每个Cipher初始化方法使用一个模式参数opmod，并用此模式初始化Cipher对象。此外还有其他参数，包括密钥key、包含密钥的证书certificate、算法参数params和随机源random。
+            cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+            return Base64.encodeBase64URLSafeString(rsaSplitCodec(cipher, Cipher.ENCRYPT_MODE, data.getBytes(CHARSET), privateKey.getModulus().bitLength()));
+        } catch (Exception e) {
+            throw new RuntimeException("加密字符串[" + data + "]时遇到异常", e);
         }
     }
+
+    /**
+     * 公钥解密
+     * @param data
+     * @param publicKey
+     * @return
+     */
+
+    public static String publicDecrypt(String data, RSAPublicKey publicKey) {
+        try {
+            Cipher cipher = Cipher.getInstance(RSA_ALGORITHM);
+            cipher.init(Cipher.DECRYPT_MODE, publicKey);
+            return new String(rsaSplitCodec(cipher, Cipher.DECRYPT_MODE, Base64.decodeBase64(data), publicKey.getModulus().bitLength()), CHARSET);
+        } catch (Exception e) {
+            throw new RuntimeException("解密字符串[" + data + "]时遇到异常", e);
+        }
+    }
+
+    //rsa切割解码  , ENCRYPT_MODE,加密数据   ,DECRYPT_MODE,解密数据
+    private static byte[] rsaSplitCodec(Cipher cipher, int opmode, byte[] datas, int keySize) {
+        int maxBlock = 0;  //最大块
+        if (opmode == Cipher.DECRYPT_MODE) {
+            maxBlock = keySize / 8;
+        } else {
+            maxBlock = keySize / 8 - 11;
+        }
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int offSet = 0;
+        byte[] buff;
+        int i = 0;
+        try {
+            while (datas.length > offSet) {
+                if (datas.length - offSet > maxBlock) {
+                    //可以调用以下的doFinal（）方法完成加密或解密数据：
+                    buff = cipher.doFinal(datas, offSet, maxBlock);
+                } else {
+                    buff = cipher.doFinal(datas, offSet, datas.length - offSet);
+                }
+                out.write(buff, 0, buff.length);
+                i++;
+                offSet = i * maxBlock;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("加解密阀值为[" + maxBlock + "]的数据时发生异常", e);
+        }
+        byte[] resultDatas = out.toByteArray();
+        IOUtils.closeQuietly(out);
+        return resultDatas;
+    }
+
+    // 简单测试____________
+    public static void main(String[] args) throws Exception {
+        Map<String, String> keyMap = RSAUtils.createKeys(1024);
+        String publicKey = keyMap.get("publicKey");
+        String privateKey = keyMap.get("privateKey");
+        System.out.println("公钥: \n\r" + publicKey);
+        System.out.println("私钥： \n\r" + privateKey);
+
+        System.out.println("公钥加密——私钥解密");
+        String str = "站在大明门前守卫的禁卫军，事先没有接到\n" + "有关的命令，但看到大批盛装的官员来临，也就\n" + "以为确系举行大典，因而未加询问。进大明门即\n" + "为皇城。文武百官看到端门午门之前气氛平静，\n" + "城楼上下也无朝会的迹象，既无几案，站队点名\n" + "的御史和御前侍卫“大汉将军”也不见踪影，不免\n"
+                + "心中揣测，互相询问：所谓午朝是否讹传？";
+        System.out.println("\r明文：\r\n" + str);
+        System.out.println("\r明文大小：\r\n" + str.getBytes().length);
+        String encodedData = RSAUtils.publicEncrypt(str, RSAUtils.getPublicKey(publicKey));  //传入明文和公钥加密,得到密文
+        System.out.println("密文：\r\n" + encodedData);
+        String decodedData = RSAUtils.privateDecrypt(encodedData, RSAUtils.getPrivateKey(privateKey)); //传入密文和私钥,得到明文
+        System.out.println("解密后文字: \r\n" + decodedData);
+
+    }
+
 }
