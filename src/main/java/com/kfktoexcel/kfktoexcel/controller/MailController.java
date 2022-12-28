@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Random;
 
@@ -50,5 +47,56 @@ public class MailController {
         }
         sendMail("邮件标题", "邮件内容", email);  //收件人邮箱作为参数是为了从前端获取
         return code;  //返回验证码
+    }
+
+    @RequestMapping("/cpu")
+    public void cpuTest() {
+        int a = 0;
+        while (true) {
+            a++;
+        }
+    }
+
+    private static Object lock1 = new Object();
+
+    private static Object lock2 = new Object();
+
+
+    @GetMapping("/lock")
+    public void lockTest() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (lock1) {
+                   log.info("thread1拿到锁lock1");
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    synchronized (lock2) {
+                        log.info("thread1拿到锁lock2");
+                    }
+                }
+            }
+        }, "thread1").start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (lock2) {
+                    log.info("thread2拿到锁lock2");
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    synchronized (lock1) {
+                        log.info("thread2拿到锁lock1");
+                    }
+                }
+            }
+        }, "thread2").start();
+
     }
 }
