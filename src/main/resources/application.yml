@@ -100,7 +100,8 @@ mqtt:
   #server-uris: tcp://10.88.42.114:1883
   #server-uris: tcp://119.3.132.245:1883
   #server-uris: tcp://192.168.2.124:1883
-  server-uris: tcp://119.3.51.3:1883
+  #server-uris: tcp://119.3.51.3:1883
+  server-uris: tcp://119.3.31.181:30638
   #server-uris: tcp://119.3.31.181:1883,tcp://121.36.143.78:1883,tcp://122.112.136.178:1883
   #server-uris: tcp://192.168.2.124:1883
   #server-uris: tcp://192.168.56.101:1883

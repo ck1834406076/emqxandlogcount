@@ -3,7 +3,7 @@
     <!-- 项目名称 -->
     <property name="projectname" value="emqxtest" />
     <!-- 日志存放路径 -->
-    <property name="log.path" value="/opt/logs" />
+    <property name="log.path" value="/home/logs" />
     <!-- 日志输出格式 -->
     <property name="log.pattern" value="%d{yyy-MM-dd HH:mm:ss.SSS} [%X{X-B3-TraceId:-},%X{X-B3-SpanId:-}] [%thread] %-5level %logger{20} - %msg%n" />
 
@@ -47,7 +47,7 @@
             <maxHistory>60</maxHistory>
             <totalSizeCap>10GB</totalSizeCap>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-                <maxFileSize>100 MB</maxFileSize>
+                <maxFileSize>500 MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
         <encoder>
