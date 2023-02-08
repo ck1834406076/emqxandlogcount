@@ -100,6 +100,9 @@
     <!--apollo日志-->
     <logger name="com.ctrip.framework.apollo" level="error" />
 
+
+    <logger name=" org.apache.flink.runtime" level="error" />
+
     <logger name="com.kfktoexcel.kfktoexcel.endpoint.MqttHandler" level="info" />
 
     <!--频繁打印的mapper日志-->
