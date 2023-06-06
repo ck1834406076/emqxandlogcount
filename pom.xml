@@ -71,11 +71,11 @@
             <version>snapshot-20080530</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>5.2.2</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.poi</groupId>-->
+<!--            <artifactId>poi-ooxml</artifactId>-->
+<!--            <version>5.2.2</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>mysql</groupId>
@@ -161,6 +161,22 @@
             <artifactId>flink-runtime-web_2.11</artifactId>
             <version>1.11.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-connector-kafka</artifactId>
+            <version>1.16.0</version>
+        </dependency>
+            <!-- Apache POI -->
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>5.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>5.0.0</version>
+            </dependency>
 
     </dependencies>
 
