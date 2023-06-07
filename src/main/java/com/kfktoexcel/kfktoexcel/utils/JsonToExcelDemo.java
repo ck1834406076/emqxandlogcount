@@ -54,8 +54,8 @@ public class JsonToExcelDemo {
         JsonArray rows = jsonObject.getAsJsonArray("rows");
         // 创建表头
         Row headerRow = sheet.createRow(0);
-        headerRow.createCell(0, CellType.STRING).setCellValue("Name");
-        headerRow.createCell(1, CellType.STRING).setCellValue("ID Card No.");
+        headerRow.createCell(0, CellType.STRING).setCellValue("姓名");
+        headerRow.createCell(1, CellType.STRING).setCellValue("身份证号");
 
         int rownum = 1;
         for (JsonElement js : rows) {
