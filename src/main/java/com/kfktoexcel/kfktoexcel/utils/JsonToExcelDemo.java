@@ -18,15 +18,19 @@ import java.io.IOException;
  * @author chengkui
  */
 public class JsonToExcelDemo {
-
+    /**
+     * 测试代码
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         File file = new File("C:\\Users\\chengkui\\Documents\\WeChat Files\\wxid_67a4gaqprec221\\FileStorage\\File\\2023-06\\新建文件夹\\新建文件夹");
-        if (file.isDirectory()){
+        if (file.isDirectory()) {
             File[] files = file.listFiles();
             for (File file1 : files) {
-                if (file1.getName().endsWith(".txt")){
+                if (file1.getName().endsWith(".txt")) {
                     String jsonFilePath = file1.getCanonicalPath();
-                    String excelFilePath =jsonFilePath.replace(".txt",".xlsx");
+                    String excelFilePath = jsonFilePath.replace(".txt", ".xlsx");
                     try {
                         // 读取JSON文件并解析为JSON对象
                         JsonObject jsonObject = readJsonFile(jsonFilePath);
@@ -68,7 +72,7 @@ public class JsonToExcelDemo {
             dataRow.createCell(1, CellType.STRING).setCellValue(object.get("idCardNo").getAsString());
         }
 
-        try ( FileOutputStream fileOutputStream = new FileOutputStream(excelFilePath);) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(excelFilePath);) {
             workbook.write(fileOutputStream);
         }
         workbook.close();
